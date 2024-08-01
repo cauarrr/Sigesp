@@ -1,18 +1,17 @@
-
+import java.util.List;
+import java.time.LocalDate;
 public class SelecaoPessoas extends ProcessoSeletivo {
-    private Aluno[] alunosInscritos;
-    private Aluno[] aprovados;
+    private List<Aluno> alunosInscritos;
+    private List<Aluno> aprovados;
 
     public SelecaoPessoas(
             String nome, 
             String descricao, 
             int numVagas, 
-            String iniInscricoes, 
-            String fimInscricoes, 
-            Professor[] banca, 
-            int numInscritos, 
-            int numAprovados, 
-            String status
+            LocalDate iniInscricoes, 
+            LocalDate fimInscricoes, 
+            List<Professor> banca, 
+            Fase status
         ) {
         
         super(
@@ -22,25 +21,23 @@ public class SelecaoPessoas extends ProcessoSeletivo {
             iniInscricoes, 
             fimInscricoes, 
             banca, 
-            numInscritos, 
-            numAprovados, 
             status
         );
     }
 
-    public Aluno[] getAlunosInscritos() {
+    public List<Aluno> getAlunosInscritos() {
         return alunosInscritos;
     }
 
-    public void setAlunosInscritos(Aluno[] alunosInscritos) {
+    public void setAlunosInscritos(List<Aluno> alunosInscritos) {
         this.alunosInscritos = alunosInscritos;
     }
 
-    public Aluno[] getAprovados() {
+    public List<Aluno> getAprovados() {
         return aprovados;
     }
 
-    public void setAprovados(Aluno[] aprovados) {
+    public void setAprovados(List<Aluno> aprovados) {
         this.aprovados = aprovados;
     }
 }

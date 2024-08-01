@@ -1,11 +1,14 @@
-public abstract class Usuario {
+public class Usuario {
     private String nome;
     private String email;
     private String senha;
     private String login;
+    private Aluno aluno;
+    private Professor professor;
 
     Usuario(){
-
+        this.aluno = null;
+        this.professor = null;
     }
 
     public Usuario(String nome, String email, String senha, String login) {
@@ -13,6 +16,8 @@ public abstract class Usuario {
         this.email = email;
         this.senha = senha;
         this.login = login;
+        this.aluno = null;
+        this.professor = null;
     }
 
     public String getNome() {
@@ -47,10 +52,27 @@ public abstract class Usuario {
         this.login = login;
     }
 
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+    
     @Override
     public String toString() {
         return "[Nome:" + nome + ", Email: " + email + ", Login: " + login + "]";
     }
+
 
     
     

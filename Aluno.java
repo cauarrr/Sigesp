@@ -1,31 +1,39 @@
-public class Aluno extends Usuario {
-    private String matricula;
+public class Aluno {
+    private int matricula;
     private String curso;
     private int semestre;
     
     public Aluno() {
     }
-    public Aluno(String nome, String email, String senha, String login) {
-        super(nome, email, senha, login);
+
+    public Aluno(int matricula, String curso, int semestre) {
+        this.matricula = matricula;
+        this.curso = curso;
+        this.semestre = semestre;
     }
-    public String getMatricula() {
+
+    public int getMatricula() {
         return matricula;
     }
-    public void setMatricula(String matricula) {
+
+    public void setMatricula(int matricula) {
         this.matricula = matricula;
     }
+
     public String getCurso() {
         return curso;
     }
+
     public void setCurso(String curso) {
         this.curso = curso;
     }
+
     public int getSemestre() {
         return semestre;
     }
+
     public void setSemestre(int semestre) {
         this.semestre = semestre;
     }
 
-    
 }

@@ -1,24 +1,41 @@
+import java.util.List;
+import java.time.LocalDate;
 public class SelecaoProjetos extends ProcessoSeletivo {
-    private Projeto[] projetosInscritos;
-    private Projeto[] aprovados;
+    private List<Projeto> projetosInscritos;
+    private List<Projeto> aprovados;
 
-    public SelecaoProjetos(String nome, String descricao, int numVagas, String iniInscricoes, String fimInscricoes, Professor[] banca, int numInscritos, int numAprovados, String status) {
-        super(nome, descricao, numVagas, iniInscricoes, fimInscricoes, banca, numInscritos, numAprovados, status);
+    public SelecaoProjetos(
+        String nome, 
+        String descricao, 
+        int numVagas, 
+        LocalDate iniInscricoes, 
+        LocalDate fimInscricoes, 
+        List<Professor> banca, 
+        Fase status
+        ) {
+        super(
+            nome, 
+            descricao, 
+            numVagas, 
+            iniInscricoes, 
+            fimInscricoes, 
+            banca,
+            status);
     }
 
-    public Projeto[] getProjetosInscritos() {
+    public List<Projeto> getProjetosInscritos() {
         return projetosInscritos;
     }
 
-    public void setProjetosInscritos(Projeto[] projetosInscritos) {
+    public void setProjetosInscritos(List<Projeto> projetosInscritos) {
         this.projetosInscritos = projetosInscritos;
     }
 
-    public Projeto[] getAprovados() {
+    public List<Projeto> getAprovados() {
         return aprovados;
     }
 
-    public void setAprovados(Projeto[] aprovados) {
+    public void setAprovados(List<Projeto> aprovados) {
         this.aprovados = aprovados;
     }
 }

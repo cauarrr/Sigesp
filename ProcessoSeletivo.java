@@ -1,25 +1,29 @@
+import java.util.List;
+import java.time.LocalDate;
 public abstract class ProcessoSeletivo {
     private String nome;
     private String descricao;
     private int numVagas;
-    private String iniInscricoes;
-    private String fimInscricoes; 
-    private Professor[] banca; 
+    private List<Professor> banca; 
     private int numInscritos;
     private int numAprovados;
-    private String status;
+    private Fase status;
+    private Avaliacao avaliacao;
 
     public ProcessoSeletivo(){}
     
-    public ProcessoSeletivo(String nome, String descricao, int numVagas, String iniInscricoes, String fimInscricoes, Professor[] banca, int numInscritos, int numAprovados, String status) {
+    public ProcessoSeletivo(
+        String nome,
+        String descricao, 
+        int numVagas, 
+        LocalDate iniInscricoes, 
+        LocalDate fimInscricoes, 
+        List<Professor> banca,   
+        Fase status) {
         this.nome = nome;
         this.descricao = descricao;
         this.numVagas = numVagas;
-        this.iniInscricoes = iniInscricoes;
-        this.fimInscricoes = fimInscricoes;
         this.banca = banca;
-        this.numInscritos = numInscritos;
-        this.numAprovados = numAprovados;
         this.status = status;
     }
 
@@ -53,31 +57,11 @@ public abstract class ProcessoSeletivo {
         }
     }
     
-    public String getIniInscricoes() {
-        return iniInscricoes;
-    }
-    
-    public void setIniInscricoes(String iniInscricoes) {
-        if (iniInscricoes != null) {
-            this.iniInscricoes = iniInscricoes;
-        }
-    }
-    
-    public String getFimInscricoes() {
-        return fimInscricoes;
-    }
-    
-    public void setFimInscricoes(String fimInscricoes) {
-        if (fimInscricoes != null) {
-            this.fimInscricoes = fimInscricoes;
-        }
-    }
-    
-    public Professor[] getBanca() {
+    public List<Professor> getBanca() {
         return banca;
     }
     
-    public void setBanca(Professor[] banca) {
+    public void setBanca(List<Professor> banca) {
         if (banca != null) {
             this.banca = banca;
         }
@@ -97,14 +81,22 @@ public abstract class ProcessoSeletivo {
         }
     }
     
-    public String getStatus() {
+    public Fase getStatus() {
         return status;
     }
     
-    public void setStatus(String status) {
+    public void setStatus(Fase status) {
         if (status != null) {
             this.status = status;
         }
+    }
+
+    public Avaliacao getAvaliacao(){
+        return avaliacao;
+    }
+
+    public void setAvaliacao(Avaliacao avaliacao){
+        this.avaliacao = avaliacao;
     }
     
 }
