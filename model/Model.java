@@ -1,26 +1,43 @@
-package poo.model;
+package sigesp.model;
 
 import java.util.HashMap;
+import java.util.Observer;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
+import sigesp.view.*;
+import sigesp.controller.*;
 
 public class Model {
+    
     private HashMap<String, Usuario> usuarios = new HashMap<String, Usuario>(); // Usuários do sistema
-    private ArrayList<ProcessoSeletivo> processosSeletivos = new ArrayList<ProcessoSeletivo>(); // Lista de processos seletivos
+    private ArrayList<SelecaoPessoas> selecaoPessoas = new ArrayList<>(); // Lista de processos seletivos de pessoas
+    private ArrayList<SelecaoProjetos> selecaoProjetos = new ArrayList<>(); // Lista de processos seletivos de projetos
     private Usuario usuarioAutt; // Usuário autenticado pelo sistema
     private ArrayList<Observer> observers = new ArrayList<Observer>(); // Lista de observadores interessados no modelo
+   
+    //adiciona um novo observer na lista de observers
+    public void addObserver(Observer observer) {
+        if (observer != null) {
+            observers.add(observer);
+        }
+    }
 
-    /*
-     * Método utilizado para notificar todos os observadores contidos no ArrayList que o modelo mudou
-     */
+    //exclui um observer da lista de observers
+    public void removerObserver(Observer observer) {
+        if (observer != null) {
+            observers.remove(observer);
+        }
+    }
+
+    //Notifica todos os observers que ouve uma mudanca no Model
     public void notifica() {
         for (Observer o : observers) {
             o.update(); // update é a operação definida na interface Observer
         }
     }
-
-    // Retorna o usuário de acordo com seu login salvo no HashMap
+    
+    //retorna o usuario de acordo com seu id salvo no HashMap
     public Usuario getUsuario(String login) {
         if (login != null) {
             Usuario usuario = usuarios.get(login);
@@ -29,186 +46,160 @@ public class Model {
         return null;
     }
 
-    // Adiciona um novo usuário no HashMap
-    public void setUsuario(Usuario usuario) {
-        if (usuario != null) {
-            String login = usuario.getLogin();
-            if (login != null) {
-                usuarios.put(login, usuario);
-                notifica();
-            }
+    //instanceia e cadastra um novo usuario no sistema, salvando-o no ArrayList
+    public boolean cadastrarAluno(String nome, String email, String senha, String login, String tipoVinculo, String matriculaSiape) {
+        // Converte a matricula em inteiro
+        int matricula = converterMatricula(matriculaSiape);
+        
+        // Verifica se já existe um HashMap de Usuarios
+        if(this.usuarios == null){
+            this.usuarios = new HashMap<String, Usuario>(); 
         }
-    }
-
-    // Instancia e cadastra um novo usuário no sistema, salvando-o no HashMap
-    public void cadastrarUsuario(String nome, String email, String senha, String login) {
-        if (nome != null && email != null && senha != null && login != null) {
-            Usuario novoUsuario = new Usuario(nome, email, senha, login); // Cria um novo objeto Usuario
+        boolean retorno;
+        System.out.println("\n\n Verificou se existe lista de usuários\n\n");
+        Aluno aluno = new Aluno(matricula, tipoVinculo); 
+        Usuario novoUsuario = new Usuario(nome, email, senha, login, aluno); // Cria um novo objeto Usuario
             if (!usuarios.containsKey(login)) { // Verifica se o login já não está cadastrado
                 usuarios.put(login, novoUsuario); // Adiciona o usuário ao HashMap
-                notifica(); // Notifica os observadores
-                // Mensagem de sucesso removida, para simplificação
+                //notifica(); // Notifica os observadores
+                retorno = true;
             } else {
-                // Mensagem de erro removida, para simplificação
+                retorno = false;
             }
+            return retorno;
+    }
+    
+    public boolean cadastrarProfessor(String nome, String email, String senha, String login, String tipoVinculo, String siape) {
+        // Verifica se já existe um HashMap de Usuarios
+        if(this.usuarios == null){
+            this.usuarios = new HashMap<String, Usuario>(); 
+        }
+        boolean retorno;
+        Professor professor = new Professor(siape, tipoVinculo); 
+        Usuario novoUsuario = new Usuario(nome, email, senha, login, professor); // Cria um novo objeto Usuario
+            if (!usuarios.containsKey(login)) { // Verifica se o login já não está cadastrado
+                usuarios.put(login, novoUsuario); // Adiciona o usuário ao HashMap
+                //notifica(); // Notifica os observadores
+                retorno = true;
+            } else {
+                retorno = false;
+            }
+        return retorno;
+    }
+
+    //autentifica o usuario (logar)
+    public boolean autenticarUsuario(String login, String senha) {
+        if (login == null || senha == null) {
+            System.out.println("Erro: Login ou senha não podem ser nulos.");
+            return false;
+        }
+
+        Usuario usuario = usuarios.get(login);
+        if (usuario != null && senha.equals(usuario.getSenha())) {
+            usuarioAutt = usuario;
+            System.out.println("Usuário autenticado com sucesso!");
+            return true;
         } else {
-            // Mensagem de erro removida, para simplificação
+            System.out.println("Erro: Login ou senha incorretos.");
+            return false;
         }
     }
 
-    // Autentica o usuário (logar)
-    public Usuario autenticarUsuario(String login, String senha) {
-        Usuario usuario = null;
-        if (login != null && senha != null) {
-            usuario = usuarios.get(login);
-            if (usuario != null) {
-                if (login.equals(usuario.getLogin()) && senha.equals(usuario.getSenha())) {
-                    usuarioAutt = usuario;
-                }
-            }
-        }
-        return usuarioAutt;
-    }
-
-    // Desautentica o usuário (deslogar)
+    //desautentifica o usuario (deslogar)
     public void deslogarUsuario() {
         usuarioAutt = null;
-        notifica();
+        //notifica();
     }
 
-    // Retorna o usuário autenticado (usuário logado)
+    //retorna o usuario autenticado (usuario logado)
     public Usuario getUsuarioAutt() {
         return usuarioAutt;
     }
 
-    // Adiciona um novo observer na lista de observers
-    public void addObserver(Observer observer) {
-        if (observer != null) {
-            observers.add(observer);
-        }
-    }
 
-    // Exclui um observer da lista de observers
-    public void removerObserver(Observer observer) {
-        if (observer != null) {
-            observers.remove(observer);
-        }
-    }
-
-    // Retorna o número de usuários cadastrados no HashMap
+    //retorna o numero de usuarios cadastrados no HashMap
     public int getTotalUsuarios() {
         return usuarios.size();
     }
-
-    // Adiciona um novo processo seletivo ao ArrayList
-    public void adicionarProcessoSeletivo(ProcessoSeletivo processoSeletivo) {
-        if (processoSeletivo != null) {
-            processosSeletivos.add(processoSeletivo);
-            notifica();
-        }
-    }
-
-    // Remove um processo seletivo do ArrayList
-    public void removerProcessoSeletivo(ProcessoSeletivo processoSeletivo) {
-        if (processoSeletivo != null) {
-            processosSeletivos.remove(processoSeletivo);
-            notifica();
-        }
-    }
-
-
-
-    //***************GETERS***************
-    //********PROSCESSO_SELETIVO**********
-
-    // Retorna o nome do processo seletivo de acordo com o nome fornecido
-    public String getNomeProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getNome();
-            }
-        }
-        return null;
-    }
-    // Retorna a descrição do processo seletivo de acordo com o nome fornecido
-    public String getDescricaoProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getDescricao();
-            }
-        }
-        return null;
-    }
-    // Retorna o número de vagas do processo seletivo de acordo com o nome fornecido
-    public int getNumVagasProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getNumVagas();
-            }
-        }
-        return -1; // Retorna um valor inválido se não encontrar
-    }
-    // Retorna o número de inscritos do processo seletivo de acordo com o nome fornecido
-    public int getNumInscritosProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getNumInscritos();
-            }
-        }
-        return -1; // Retorna um valor inválido se não encontrar
-    }
-    // Retorna o número de aprovados do processo seletivo de acordo com o nome fornecido
-    public int getNumAprovadosProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getNumAprovados();
-            }
-        }
-        return -1; // Retorna um valor inválido se não encontrar
-    }
-    // Retorna o status do processo seletivo de acordo com o nome fornecido
-    public Fase getStatusProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getStatus();
-            }
-        }
-        return null;
-    }
-    // Retorna a avaliação do processo seletivo de acordo com o nome fornecido
-    public Avaliacao getAvaliacaoProcessoSeletivo(String nome) {
-        for (ProcessoSeletivo ps : processosSeletivos) {
-            if (ps.getNome().equals(nome)) {
-                return ps.getAvaliacao();
-            }
-        }
-        return null;
-    }
-    //***************GETERS***************
-    //***************USUARIO**************
     
-    // Retorna o nome do usuário de acordo com o login fornecido
-    public String getNomeUsuario(String login) {
-        Usuario usuario = getUsuario(login);
-        if (usuario != null) {
-            return usuario.getNome();
+    private boolean sohTemNumeros(String matriculaText){
+        if (matriculaText.matches("\\d+")) {
+        // A string contém apenas números
+            return true;
+        } else {
+        // A string contém caracteres não numéricos
+            System.out.println("A matrícula contém caracteres que não são números.");
+            return false;
         }
-        return null;
     }
-    // Retorna o email do usuário de acordo com o login fornecido
-    public String getEmailUsuario(String login) {
-        Usuario usuario = getUsuario(login);
-        if (usuario != null) {
-            return usuario.getEmail();
+
+    private int converterMatricula(String matriculaText){
+        if(sohTemNumeros(matriculaText)){
+            int matricula = Integer.parseInt(matriculaText);
+            System.out.println("A matrícula como número inteiro é: " + matricula);
+            return matricula; 
         }
-        return null;
+        return 0;
     }
-    // Retorna o login do usuário de acordo com o login fornecido
-    public String getLoginUsuario(String login) {
-        Usuario usuario = getUsuario(login);
-        if (usuario != null) {
-            return usuario.getLogin();
-        }
-        return null;
+
+     // Método para cadastrar um novo processo seletivo de pessoas
+    public boolean cadastrarSelecaoPessoas(String nome, String descricao, int numVagas, LocalDate iniInscricoes, 
+                                           LocalDate fimInscricoes, List<Professor> banca, Fase status, 
+                                           List<Aluno> alunosInscritos, List<Aluno> aprovados) {
+    if (nome == null || descricao == null || numVagas <= 0 || iniInscricoes == null || fimInscricoes == null || 
+        banca == null || banca.isEmpty() || status == null) {
+    return false; // Retorna false se algum parâmetro necessário for inválido
     }
+
+    SelecaoPessoas novoProcesso = new SelecaoPessoas(nome, descricao, numVagas, iniInscricoes, fimInscricoes, banca, status);
+    novoProcesso.setAlunosInscritos(alunosInscritos);
+    novoProcesso.setAprovados(aprovados);
+    selecaoPessoas.add(novoProcesso);
+    return true; // Processo cadastrado com sucesso
+    }
+
+    // Método para cadastrar um novo processo seletivo de projetos
+    public boolean cadastrarSelecaoProjetos(String nome, String descricao, int numVagas, LocalDate iniInscricoes, 
+                                            LocalDate fimInscricoes, List<Professor> banca, Fase status, 
+                                            List<Projeto> projetosInscritos, List<Projeto> aprovados) {
+    if (nome == null || descricao == null || numVagas <= 0 || iniInscricoes == null || fimInscricoes == null || 
+        banca == null || banca.isEmpty() || status == null) {
+    return false; // Retorna false se algum parâmetro necessário for inválido
+    }
+
+    SelecaoProjetos novoProcesso = new SelecaoProjetos(nome, descricao, numVagas, iniInscricoes, fimInscricoes, banca, status);
+    novoProcesso.setProjetosInscritos(projetosInscritos);
+    novoProcesso.setAprovados(aprovados);
+    selecaoProjetos.add(novoProcesso);
+    return true; // Processo cadastrado com sucesso
+    }
+
+    // Método para remover um processo seletivo de pessoas
+    public boolean removerSelecaoPessoas(SelecaoPessoas processo) {
+    return selecaoPessoas.remove(processo);
+    }
+
+    // Método para remover um processo seletivo de projetos
+    public boolean removerSelecaoProjetos(SelecaoProjetos processo) {
+    return selecaoProjetos.remove(processo);
+    }
+
+   
+
+    //***************GETERS***************
+    //********PROSCESSOS_SELETIVO*********
+
+    // Método para obter todos os processos de pessoas
+    public ArrayList<SelecaoPessoas> getSelecaoPessoas() {
+        return selecaoPessoas;
+    }
+
+    // Método para obter todos os processos de projetos
+    public ArrayList<SelecaoProjetos> getSelecaoProjetos() {
+        return selecaoProjetos;
+    }
+
+
 }
+
+
