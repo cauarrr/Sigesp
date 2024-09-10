@@ -26,7 +26,7 @@ public class AlterarDadosUsuarioView {
             controller.setModel(model);
             
             stage.setScene(new Scene(novaTela));
-            stage.setTitle("Cadastro de Processos Seletivos");
+            stage.setTitle("Seu Cadastro");
             stage.show();
         } catch (Exception e) {
             e.printStackTrace(); // Log adequado do erro

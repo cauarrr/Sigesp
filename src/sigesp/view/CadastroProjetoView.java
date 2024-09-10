@@ -26,7 +26,7 @@ public class CadastroProjetoView {
             controller.setModel(model);
             
             stage.setScene(new Scene(novaTela));
-            stage.setTitle("Cadastro de Processos Seletivos");
+            stage.setTitle("Cadastro de Projetos");
             stage.show();
         } catch (Exception e) {
             e.printStackTrace(); // Log adequado do erro

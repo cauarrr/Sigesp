@@ -10,26 +10,15 @@ import sigesp.controller.*;
 public class Model {
     
     private static HashMap<String, Usuario> usuarios = new HashMap<String, Usuario>(); // Usuários do sistema
-    private static HashMap<String, Usuario> professores = new HashMap<String, Usuario>(); // Usuários do sistema
-    private static ArrayList<SelecaoPessoas> selecaoPessoas = new ArrayList<>(); // Lista de processos seletivos de pessoas
+    private static HashMap<String, Usuario> professores = new HashMap<String, Usuario>(); // Usuários com Vinculo de Professor
+    private static HashMap<String, Projeto> projetos = new HashMap<String, Projeto>(); // Projetos do sistema
+    private static HashMap<String, SelecaoPessoas> selecoesPessoas = new HashMap<String, SelecaoPessoas>(); // Lista de processos seletivos de pessoas
+    private static HashMap<String, SelecaoProjetos> selecoesProjetos = new HashMap<String, SelecaoProjetos>(); // Lista de processos seletivos de pessoas
     //private ArrayList<SelecaoProjetos> selecaoProjetos = new ArrayList<>(); // Lista de processos seletivos de projetos
     private Usuario usuarioAutt; // Usuário autenticado pelo sistema
    
 
-    /*
-     * Método utilizado para notificar todos os observadores contidos no ArrayList que o modelo mudou
-     */
-    
-    //retorna o usuario de acordo com seu id salvo no HashMap
-    public Usuario getUsuario(String login) {
-        if (login != null) {
-            Usuario usuario = usuarios.get(login);
-            return usuario;
-        }
-        return null;
-    }
-
-    //instanceia e cadastra um novo usuario no sistema, salvando-o no ArrayList
+    //instanceia e cadastra um novo Usuario com vinculo de Aluno no sistema, salvando-o no ArrayList
     public void cadastrarAluno(String nome, String email, String senha, String login, String tipoVinculo, String matriculaSiape) {
         
         // Converte a matricula em inteiro
@@ -52,8 +41,8 @@ public class Model {
             }
     }
     
+    //instanceia e cadastra um novo Usuario com vinculo de Professor no sistema, salvando-o no ArrayList
     public void cadastrarProfessor(String nome, String email, String senha, String login, String tipoVinculo, String siape) {
-        
         
         // Verifica se já existe um HashMap de Usuarios
         if(this.usuarios == null){
@@ -87,19 +76,27 @@ public class Model {
         } else {
             System.out.println("Erro: Login ou senha incorretos.");
             return false;
+        }
     }
-}
-
+ 
+    //retorna o usuario de acordo com seu id salvo no HashMap
+    public Usuario getUsuario(String login) {
+        if (login != null) {
+            Usuario usuario = usuarios.get(login);
+            return usuario;
+        }
+        return null;
+    }
+    
+    //retorna o usuario autenticado (usuario logado)
+    public Usuario getUsuarioAutt() {
+        return usuarioAutt;
+    }
 
     //desautentifica o usuario (deslogar)
     public void deslogarUsuario() {
         usuarioAutt = null;
         //notifica();
-    }
-
-    //retorna o usuario autenticado (usuario logado)
-    public Usuario getUsuarioAutt() {
-        return usuarioAutt;
     }
     
     // Método para retornar o nome de todos os professores no ArrayList
@@ -111,8 +108,23 @@ public class Model {
         return nomesProfessores;
     }
     
+    //Método para retornar um Usuario com Vinculo de Professor pelo seu nome
     public Usuario getProfessor(String nome) {
         return professores.get(nome);
+    }
+    
+    public boolean cadastrarProjeto(String nome, String descricao, String coordenador, LocalDate dataInicio) {
+       
+        if (nome == null || descricao == null || dataInicio == null || coordenador == null) {
+            return false; // Retorna false se algum parâmetro necessário for inválido
+        }
+        
+        Usuario coordenador1 = getProfessor(coordenador);
+        
+        Projeto novoProjeto = new Projeto(nome, descricao, coordenador1, dataInicio);
+        projetos.put(nome, novoProjeto);
+        System.out.println("Projeto Cadastrado");
+        return true; // Projeto cadastrado com sucesso
     }
     
     // Método para cadastrar um novo processo seletivo de pessoas
@@ -126,10 +138,35 @@ public class Model {
         LocalDate dataDeHoje = LocalDate.now();
         Fase status = new Fase("Previsto", "O processo seletivo iniciará em breve.", dataDeHoje, iniInscricoes);
         SelecaoPessoas novoProcesso = new SelecaoPessoas(nome, descricao, numVagas, iniInscricoes, fimInscricoes, banca, status);
-        //novoProcesso.setAlunosInscritos(alunosInscritos);
-        //novoProcesso.setAprovados(aprovados);
-        selecaoPessoas.add(novoProcesso);
+        
+        selecoesPessoas.put(nome, novoProcesso);
         return true; // Processo cadastrado com sucesso
+    }
+    
+    public boolean cadastrarSelecaoProjetos(String nome, String descricao, String vagas, LocalDate iniInscricoes, 
+                                           LocalDate fimInscricoes, ArrayList<Usuario> banca) {
+        int numVagas = converterParaInteiro(vagas);
+        if (nome == null || descricao == null || numVagas <= 0 || iniInscricoes == null || fimInscricoes == null) {
+            return false; // Retorna false se algum parâmetro necessário for inválido
+        }
+        
+        LocalDate dataDeHoje = LocalDate.now();
+        Fase status = new Fase("Previsto", "O processo seletivo iniciará em breve.", dataDeHoje, iniInscricoes);
+        SelecaoProjetos novoProcesso = new SelecaoProjetos(nome, descricao, numVagas, iniInscricoes, fimInscricoes, banca, status);
+        
+        selecoesProjetos.put(nome, novoProcesso);
+        return true; // Processo cadastrado com sucesso
+    }
+    
+    public List<String> getNomesProcessos() {
+        ArrayList<String> nomesProcessos = new ArrayList<>();
+        for (String nome : selecoesPessoas.keySet()) {
+            nomesProcessos.add(nome);
+        }
+        for (String nome : selecoesProjetos.keySet()) {
+            nomesProcessos.add(nome);
+        }
+        return nomesProcessos;
     }
 
     //retorna o numero de usuarios cadastrados no HashMap

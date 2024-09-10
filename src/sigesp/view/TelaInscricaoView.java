@@ -26,7 +26,7 @@ public class TelaInscricaoView {
             controller.setModel(model);
             
             stage.setScene(new Scene(novaTela));
-            stage.setTitle("Suas Candidaturas");
+            stage.setTitle("Inscreva-se");
             stage.show();
         } catch (Exception e) {
             e.printStackTrace(); // Log adequado do erro

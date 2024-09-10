@@ -77,8 +77,10 @@ public class CadastroProcessoController extends BaseController implements Initia
     private void cadastrar(){
         if(opcaoPessoas.isSelected()){
             cadastrarProcessoPessoas();
+            limparCampos();
         } else if (opcaoProjetos.isSelected()){
-            System.out.println("Implementar o método cadastrar processo seletivo de projetos");
+            cadastrarProcessoProjetos();
+            limparCampos();
         } else {
             String mensagem = "Indique se esse processo seletivo é de pessoas ou projetos";
             mostrarJanelaErro(mensagem);
@@ -102,7 +104,27 @@ public class CadastroProcessoController extends BaseController implements Initia
         banca.add(professor2);
         banca.add(professor3);
         model.cadastrarSelecaoPessoas(nome, descricao, vagas, dtInicioInscricoes, dtFimInscricoes, banca);
-        System.out.println("\nProcesso Seletivo Cadastrado\n");
+        System.out.println("\nProcesso Seletivo de Pessoas Cadastrado\n");
+    }
+    
+    private void cadastrarProcessoProjetos(){
+        String nome = nomeProcesso.getText();
+        String descricao = descricaoProcesso.getText();
+        String vagas = numVagas.getText();
+        LocalDate dtInicioInscricoes = dataInscricoes.getValue();
+        LocalDate dtFimInscricoes = dataFimInscricoes.getValue();
+        String membro1 = (String) membroBanca1.getValue();
+        String membro2 = (String) membroBanca2.getValue();
+        String membro3 = (String) membroBanca3.getValue();
+        Usuario professor1 = model.getProfessor(membro1);
+        Usuario professor2 = model.getProfessor(membro2);
+        Usuario professor3 = model.getProfessor(membro3);
+        ArrayList<Usuario> banca = new ArrayList();
+        banca.add(professor1);
+        banca.add(professor2);
+        banca.add(professor3);
+        model.cadastrarSelecaoProjetos(nome, descricao, vagas, dtInicioInscricoes, dtFimInscricoes, banca);
+        System.out.println("\nProcesso Seletivo de Projetos Cadastrado\n");
     }
     
     @FXML
@@ -139,6 +161,8 @@ public class CadastroProcessoController extends BaseController implements Initia
         dataInscricoes.setValue(null);
         dataFimInscricoes.setValue(null);
         membroBanca1.setValue(null);
+        membroBanca2.setValue(null);
+        membroBanca3.setValue(null);
     }
     
     public static void mostrarJanelaErro(String mensagem) {

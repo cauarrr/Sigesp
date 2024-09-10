@@ -8,7 +8,7 @@ public class Projeto{
     private String descricao;
     private LocalDate dataInicio;
     private LocalDate prevTermino;
-    private Professor coordenadorProj;
+    private Usuario coordenadorProj;
     private List<Aluno> bolsistas;
     private List<Aluno> voluntarios;
 
@@ -16,7 +16,7 @@ public class Projeto{
         
     }
 
-    public Projeto(String nome, String descricao, LocalDate dataInicio, Professor coordenadorProj){
+    public Projeto(String nome, String descricao, Usuario coordenadorProj, LocalDate dataInicio ){
         this.nome = nome;
         this.descricao = descricao;
         this.dataInicio = dataInicio;
@@ -47,11 +47,14 @@ public class Projeto{
     public void setPrevTermino(LocalDate prevTermino) {
         this.prevTermino = prevTermino;
     }
-    public Professor getCoordenadorProj() {
+    public Usuario getCoordenadorProj() {
         return coordenadorProj;
     }
-    public void setCoordenadorProj(Professor coordenadorProj) {
-        this.coordenadorProj = coordenadorProj;
+    public void setCoordenadorProj(Usuario coordenadorProj) {
+        if (coordenadorProj.getVinculo() instanceof Professor){
+            this.coordenadorProj = coordenadorProj;
+        }
+        
     }
     public List<Aluno> getBolsistas() {
         return bolsistas;
