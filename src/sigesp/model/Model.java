@@ -9,8 +9,9 @@ import sigesp.controller.*;
 
 public class Model {
     
-    private HashMap<String, Usuario> usuarios = new HashMap<String, Usuario>(); // Usuários do sistema
-    private ArrayList<SelecaoPessoas> selecaoPessoas = new ArrayList<>(); // Lista de processos seletivos de pessoas
+    private static HashMap<String, Usuario> usuarios = new HashMap<String, Usuario>(); // Usuários do sistema
+    private static HashMap<String, Usuario> professores = new HashMap<String, Usuario>(); // Usuários do sistema
+    private static ArrayList<SelecaoPessoas> selecaoPessoas = new ArrayList<>(); // Lista de processos seletivos de pessoas
     //private ArrayList<SelecaoProjetos> selecaoProjetos = new ArrayList<>(); // Lista de processos seletivos de projetos
     private Usuario usuarioAutt; // Usuário autenticado pelo sistema
    
@@ -63,6 +64,7 @@ public class Model {
         Usuario novoUsuario = new Usuario(nome, email, senha, login, professor); // Cria um novo objeto Usuario
             if (!usuarios.containsKey(login)) { // Verifica se o login já não está cadastrado
                 usuarios.put(login, novoUsuario); // Adiciona o usuário ao HashMap
+                professores.put(nome, novoUsuario);
                 //notifica(); // Notifica os observadores
                 System.out.println("Usuário cadastrado com sucesso!");
             } else {
@@ -100,15 +102,27 @@ public class Model {
         return usuarioAutt;
     }
     
+    // Método para retornar o nome de todos os professores no ArrayList
+    public List<String> getNomesProfessores() {
+        List<String> nomesProfessores = new ArrayList<>();
+        for (String nome : professores.keySet()) {
+            nomesProfessores.add(nome);
+        }
+        return nomesProfessores;
+    }
+    
+    public Usuario getProfessor(String nome) {
+        return professores.get(nome);
+    }
+    
     // Método para cadastrar um novo processo seletivo de pessoas
     public boolean cadastrarSelecaoPessoas(String nome, String descricao, String vagas, LocalDate iniInscricoes, 
-                                           LocalDate fimInscricoes, String professor) {
+                                           LocalDate fimInscricoes, ArrayList<Usuario> banca) {
         int numVagas = converterParaInteiro(vagas);
         if (nome == null || descricao == null || numVagas <= 0 || iniInscricoes == null || fimInscricoes == null) {
             return false; // Retorna false se algum parâmetro necessário for inválido
         }
-        ArrayList<String> banca = new ArrayList<String>();
-        banca.add(professor);
+        
         LocalDate dataDeHoje = LocalDate.now();
         Fase status = new Fase("Previsto", "O processo seletivo iniciará em breve.", dataDeHoje, iniInscricoes);
         SelecaoPessoas novoProcesso = new SelecaoPessoas(nome, descricao, numVagas, iniInscricoes, fimInscricoes, banca, status);
@@ -121,6 +135,10 @@ public class Model {
     //retorna o numero de usuarios cadastrados no HashMap
     public int getTotalUsuarios() {
         return usuarios.size();
+    }
+    
+    public int getTotalProfessores() {
+        return professores.size();
     }
     
     private boolean sohTemNumeros(String texto){

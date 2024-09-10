@@ -25,9 +25,11 @@ public abstract class BaseController implements Initializable{
     }
     
     private Model inicializarModel() {
+       
         if(model == null){
-            System.out.println("\nBaseController: verifique pq o model = null\n");
+            
             model = new Model();
+            System.out.println("\nProfessores: "+ model.getTotalProfessores());
         }
         return model;
     }

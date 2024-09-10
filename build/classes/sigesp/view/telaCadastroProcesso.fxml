@@ -57,7 +57,7 @@
             <Font name="Calibri" size="14.0" />
          </font>
       </Label>
-      <Label  layoutX="65.0" layoutY="263.0" prefHeight="21.0" prefWidth="196.0" text="Coordenador(a) 1:">
+      <Label  layoutX="65.0" layoutY="263.0" prefHeight="21.0" prefWidth="196.0" text="Membro da banca 1:">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -68,7 +68,7 @@
             <Font name="Calibri" size="14.0" />
          </font>
       </Label>
-      <Button cache="true" layoutX="331.0" layoutY="622.0" mnemonicParsing="false" text="CADASTRAR">
+      <Button cache="true" layoutX="331.0" layoutY="622.0" mnemonicParsing="false" text="CADASTRAR" onAction="#cadastrar" >
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -110,7 +110,7 @@
          </font>
       </Label>
       <ComboBox fx:id="membroBanca3" layoutX="65.0" layoutY="394.0" prefHeight="25.0" prefWidth="616.0" />
-      <RadioButton fx:id="oppcaoPessoas" layoutX="62.0" layoutY="151.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="339.0" text="Cadastrar Processo de Pessoas" />
-      <RadioButton fx:id="oppcaoProjetos" layoutX="62.0" layoutY="172.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="339.0" text="Cadastrar Processo de Projetos" />
+      <RadioButton fx:id="opcaoPessoas" layoutX="62.0" layoutY="151.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="339.0" text="Cadastrar Processo de Pessoas" />
+      <RadioButton fx:id="opcaoProjetos" layoutX="62.0" layoutY="172.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="339.0" text="Cadastrar Processo de Projetos" />
    </children>
 </AnchorPane>

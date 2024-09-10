@@ -2,6 +2,7 @@ package sigesp.model;
 
 import java.util.List;
 import java.time.LocalDate;
+import java.util.ArrayList;
 public class SelecaoPessoas extends ProcessoSeletivo {
     private List<Aluno> alunosInscritos;
     private List<Aluno> aprovados;
@@ -12,7 +13,7 @@ public class SelecaoPessoas extends ProcessoSeletivo {
             int numVagas, 
             LocalDate iniInscricoes, 
             LocalDate fimInscricoes, 
-            List<String> banca, 
+            ArrayList<Usuario> banca, 
             Fase status
         ) {
         

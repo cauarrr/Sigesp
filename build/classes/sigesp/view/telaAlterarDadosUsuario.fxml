@@ -18,17 +18,17 @@
       </Label>
       <Separator layoutY="36.0" prefHeight="0.0" prefWidth="744.0" />
       <Separator layoutY="81.0" prefHeight="0.0" prefWidth="744.0" />
-      <Label fx:id="nomeLabel" layoutX="14.0" layoutY="36.0" prefHeight="21.0" prefWidth="148.0" text="Marcos Vinicius Amostrado">
+      <Label fx:id="nomeLabel" layoutX="14.0" layoutY="36.0" prefHeight="21.0" prefWidth="148.0" text="">
          <font>
             <Font name="Calibri Bold" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="emailLabel" layoutX="14.0" layoutY="57.0" prefHeight="21.0" prefWidth="196.0" text="marcosvinicuis@amostradinho.com">
+      <Label fx:id="emailLabel" layoutX="14.0" layoutY="57.0" prefHeight="21.0" prefWidth="196.0" text="">
          <font>
             <Font name="Calibri" size="12.0" />
          </font>
       </Label>
-      <Label fx:id="matriculaLabel" layoutX="174.0" layoutY="36.0" prefHeight="21.0" prefWidth="115.0" text="Siape: 552407">
+      <Label fx:id="matriculaLabel" layoutX="174.0" layoutY="36.0" prefHeight="21.0" prefWidth="115.0" text="">
          <font>
             <Font name="Calibri" size="12.0" />
          </font>

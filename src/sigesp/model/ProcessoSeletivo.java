@@ -2,12 +2,13 @@ package sigesp.model;
 
 import java.util.List;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import sigesp.model.Professor;
 public abstract class ProcessoSeletivo {
     private String nome;
     private String descricao;
     private int numVagas;
-    private List<String> banca; 
+    private ArrayList<Usuario> banca; 
     private int numInscritos;
     private int numAprovados;
     private Fase status;
@@ -21,7 +22,7 @@ public abstract class ProcessoSeletivo {
         int numVagas, 
         LocalDate iniInscricoes, 
         LocalDate fimInscricoes, 
-        List<String> banca,   
+        ArrayList<Usuario> banca,   
         Fase status) {
         this.nome = nome;
         this.descricao = descricao;
@@ -60,11 +61,11 @@ public abstract class ProcessoSeletivo {
         }
     }
     
-    public List<String> getBanca() {
+    public ArrayList<Usuario> getBanca() {
         return banca;
     }
     
-    public void setBanca(List<String> banca) {
+    public void setBanca(ArrayList<Usuario> banca) {
         if (banca != null) {
             this.banca = banca;
         }

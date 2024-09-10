@@ -14,17 +14,8 @@ import sigesp.controller.LoginController;
 import sigesp.controller.TelaProfessorController;
 import sigesp.model.Model;
 
-public class TelaProfessorView extends Application {
+public class TelaProfessorView {
     
-    @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/sigesp/view/telaProfessor.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
-    }
     
     public static void carregar(Stage stage, Model model) {
         try {

@@ -3,12 +3,10 @@ package sigesp.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import sigesp.model.Aluno;
 import sigesp.model.Model;
 import sigesp.model.Professor;
 import sigesp.model.Usuario;
