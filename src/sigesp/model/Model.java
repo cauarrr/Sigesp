@@ -157,6 +157,58 @@ public class Model {
         selecoesProjetos.put(nome, novoProcesso);
         return true; // Processo cadastrado com sucesso
     }
+
+    public boolean editarNomeUsuario(String novoNome) {
+        if (usuarioAutt == null) {
+            return false; // Retorna falso caso nao tenha nenhum usuario autenticado
+        }
+        if (novoNome == null || novoNome.isEmpty()) {
+            return false; // Retorna falso caso o novo nome for vazio
+        }
+        usuarioAutt.setNome(novoNome); // Atualiza o nome do usuario autenticado
+        return true;
+        }
+    
+    // Metodo para mudar o login (matricula/siape) do usuario autenticado
+    public boolean editarLoginUsuario(String novoLogin) {
+        if (novoLogin == null || usuarios.containsKey(novoLogin)) {
+            return false; // Retorna false se o novo login for nulo ou ja existir no sistema
+            }
+    
+        String loginAntigo = usuarioAutt.getLogin();
+        
+        // Remove o login antigo do HashMap correto (professor ou aluno)
+        if (usuarioAutt.getVinculo() instanceof Professor) {
+            professores.remove(loginAntigo);
+        } else if (usuarioAutt.getVinculo() instanceof Aluno) {
+            usuarios.remove(loginAntigo);
+        }
+        
+        // Atualiza o login no objeto usuario autenticado
+        usuarioAutt.setLogin(novoLogin);
+    
+        // Adiciona o novo login ao HashMap correto (professor ou aluno)
+        if (usuarioAutt.getVinculo() instanceof Professor) {
+            professores.put(novoLogin, usuarioAutt);
+        } else if (usuarioAutt.getVinculo() instanceof Aluno) {
+            usuarios.put(novoLogin, usuarioAutt);
+        }
+        
+        return true; // Retorna true se o login foi atualizado com sucesso
+    }
+
+    public boolean editarSenhaUsuario(String novaSenha) {
+        if (usuarioAutt == null) {
+            return false; // Se nao tiver usuario autenticado, retorna false
+        }
+    
+        if (novaSenha == null || novaSenha.isEmpty()) {
+            return false; // Se a senha for null/vazia, retorna false
+        }
+    
+        usuarioAutt.setSenha(novaSenha); // Atualiza a senha do usuario autenticado
+        return true; // Se tudo deu certo, retorna true
+    }
     
     public List<String> getNomesProcessos() {
         ArrayList<String> nomesProcessos = new ArrayList<>();
